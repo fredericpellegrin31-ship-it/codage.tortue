@@ -29,11 +29,6 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
-        /* Grille fixée pour rester carrée */
-        .grid-bg-pattern {
-            background-image: radial-gradient(var(--tw-gradient-stops));
-        }
     </style>
 </head>
 <body class="min-h-screen bg-slate-50 flex flex-col overflow-x-hidden">
@@ -247,17 +242,20 @@
             turtle: {
                 id: 'turtle', name: 'La Tortue', robotSVG: turtleSVG, targetIcon: '🥬', obstacleIcon: '🪨',
                 bgClass: 'bg-emerald-600', gridBorderClass: 'border-emerald-300', 
-                gridCellClass: 'border-emerald-200 from-emerald-100 to-transparent'
+                gridCellClass: 'border-emerald-200 from-emerald-100 to-transparent',
+                cellBgLight: 'bg-emerald-50', cellBgDark: 'bg-emerald-100'
             },
             pirate: {
                 id: 'pirate', name: 'Le Pirate', robotSVG: pirateSVG, targetIcon: '💎', obstacleIcon: '🌴',
                 bgClass: 'bg-amber-600', gridBorderClass: 'border-amber-300', 
-                gridCellClass: 'border-amber-200 from-amber-100 to-transparent'
+                gridCellClass: 'border-amber-200 from-amber-100 to-transparent',
+                cellBgLight: 'bg-amber-100', cellBgDark: 'bg-amber-200'
             },
             football: {
                 id: 'football', name: 'Le Footballeur', robotSVG: footballSVG, targetIcon: '🥅', obstacleIcon: redPlayerSVG,
-                bgClass: 'bg-green-600', gridBorderClass: 'border-green-400', 
-                gridCellClass: 'border-green-300 from-green-200 to-transparent'
+                bgClass: 'bg-green-700', gridBorderClass: 'border-green-800', 
+                gridCellClass: 'border-green-700',
+                cellBgLight: 'bg-green-500', cellBgDark: 'bg-green-600'
             }
         };
 
@@ -513,13 +511,11 @@
                 let isItem = itemIndex !== -1;
                 let isCollected = isItem && state.collectedItems.includes(itemIndex);
 
+                // Fond de couleur uniforme (le plus clair)
+                let cellBgClass = state.currentTheme.cellBgLight;
+
                 const cell = document.createElement('div');
-                cell.className = `border flex items-center justify-center relative ${state.currentTheme.gridCellClass.split(' ')[0]}`;
-                
-                // Motif de fond
-                const bg = document.createElement('div');
-                bg.className = `absolute inset-0 opacity-20 grid-bg-pattern from-${state.currentTheme.gridCellClass.split('-')[2]}-300 to-transparent`;
-                cell.appendChild(bg);
+                cell.className = `border flex items-center justify-center relative ${state.currentTheme.gridCellClass.split(' ')[0]} ${cellBgClass}`;
 
                 // Objet intermédiaire à ramasser (Disparait si collecté)
                 if (isItem && !isCollected) {
